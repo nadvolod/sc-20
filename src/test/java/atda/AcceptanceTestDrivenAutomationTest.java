@@ -15,7 +15,6 @@ import java.net.URL;
 import static org.junit.Assert.assertTrue;
 
 public class AcceptanceTestDrivenAutomationTest {
-
     private WebDriver driver;
 
     @Before
