@@ -49,7 +49,8 @@ public class AcceptanceTestDrivenAutomationTest {
         ProductsPage productsPage = new ProductsPage(driver);
         productsPage.open();
         productsPage.addItemToCart();
-        assertEquals("1", new ShoppingCartComponent(driver).getItemsCount());
+        assertEquals("We added 1 item to the cart and expect it to be there",
+                "1", new ShoppingCartComponent(driver).getItemsCount());
     }
 
     private WebDriver getDriver() throws MalformedURLException {
