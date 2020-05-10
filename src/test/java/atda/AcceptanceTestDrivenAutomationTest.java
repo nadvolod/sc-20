@@ -1,9 +1,6 @@
 package atda;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.CapabilityType;
@@ -15,30 +12,15 @@ import java.net.URL;
 import static org.junit.Assert.assertTrue;
 
 public class AcceptanceTestDrivenAutomationTest {
-    private WebDriver driver;
-
-    @Before
-    public void setUp() throws Exception {
-        driver = getDriver();
-    }
-
-    @After
-    public void tearDown() {
-        //((JavascriptExecutor) driver).executeScript("sauce:job-result=passed");
-        if(driver != null)
-        {
-            driver.quit();
-        }
-    }
-
     @Test
     public void shouldBeAbleToLogin() throws MalformedURLException {
+        WebDriver driver = getDriver();
+
         LoginPage loginPage = new LoginPage(driver);
         loginPage.open();
         loginPage.login("standard_user", "secret_sauce");
 
-        assertTrue("User logged in and should have seen the products page",
-                new ProductsPage(driver).isLoaded());
+        assertTrue(new ProductsPage(driver).isLoaded());
     }
 
     private WebDriver getDriver() throws MalformedURLException {
