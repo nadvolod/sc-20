@@ -13,4 +13,13 @@ public class ProductsPage extends BasePage {
         WebElement inventoryContainer = waitUntilVisible(By.id("inventory_container"));
         return inventoryContainer.isDisplayed();
     }
+
+    public void open() {
+        driver.navigate().to("https://www.saucedemo.com/inventory.html");
+    }
+
+    public void addItemToCart() {
+        WebElement item = waitUntilVisible(By.className("btn_primary"));
+        item.click();
+    }
 }
