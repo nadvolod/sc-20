@@ -1,8 +1,9 @@
 package atda;
 
-import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.CapabilityType;
@@ -11,6 +12,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class AcceptanceTestDrivenAutomationTest {
@@ -19,15 +21,18 @@ public class AcceptanceTestDrivenAutomationTest {
     @Before
     public void setUp() throws Exception {
         driver = getDriver();
+        testWatcher.setDriver(driver);
     }
 
-    @After
-    public void tearDown() {
-        if(driver != null)
-        {
-            driver.quit();
+    @Rule
+    public SauceTestWatcher testWatcher = new SauceTestWatcher();
+
+    @Rule
+    public TestName testName = new TestName() {
+        public String getMethodName() {
+            return String.format("%s", super.getMethodName());
         }
-    }
+    };
 
     @Test
     public void shouldBeAbleToLogin() {
@@ -39,6 +44,14 @@ public class AcceptanceTestDrivenAutomationTest {
         assertTrue(new ProductsPage(driver).isLoaded());
     }
 
+    @Test
+    public void shouldBeAbleToAddOneItemToCart() {
+        ProductsPage productsPage = new ProductsPage(driver);
+        productsPage.open();
+        productsPage.addItemToCart();
+        assertEquals("1", new ShoppingCartComponent(driver).getItemsCount());
+    }
+
     private WebDriver getDriver() throws MalformedURLException {
         String sauceUsername = System.getenv("SAUCE_USERNAME");
         String sauceAccessKey = System.getenv("SAUCE_ACCESS_KEY");
@@ -46,7 +59,7 @@ public class AcceptanceTestDrivenAutomationTest {
         MutableCapabilities sauceOpts = new MutableCapabilities();
         sauceOpts.setCapability("username", sauceUsername);
         sauceOpts.setCapability("accessKey", sauceAccessKey);
-        sauceOpts.setCapability("name", "sampleTest");
+        sauceOpts.setCapability("name", testName.getMethodName());
         sauceOpts.setCapability("build", "ATDA");
         sauceOpts.setCapability("commandTimeout", "30");
 
