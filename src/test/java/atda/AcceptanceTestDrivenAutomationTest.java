@@ -1,5 +1,7 @@
 package atda;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
@@ -12,9 +14,23 @@ import java.net.URL;
 import static org.junit.Assert.assertTrue;
 
 public class AcceptanceTestDrivenAutomationTest {
+    private WebDriver driver;
+
+    @Before
+    public void setUp() throws Exception {
+        driver = getDriver();
+    }
+
+    @After
+    public void tearDown() {
+        if(driver != null)
+        {
+            driver.quit();
+        }
+    }
+
     @Test
-    public void shouldBeAbleToLogin() throws MalformedURLException {
-        WebDriver driver = getDriver();
+    public void shouldBeAbleToLogin() {
 
         LoginPage loginPage = new LoginPage(driver);
         loginPage.open();
